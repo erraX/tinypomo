@@ -1,0 +1,15 @@
+#container {
+  margin:auto;
+  width: 1000px;
+}
+
+#title {
+  margin-top: 50px;
+  margin-bottom: 0px;
+  font-size: 2em;
+}
+
+#logo {
+  margin-bottom: 50px;
+  width: 50px;
+}
