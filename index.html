@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <link rel="stylesheet" href="css/style.css" media="all">
+    <link rel="stylesheet" href="css/semantic.min.css" media="all">
+    <script src="js/jquery-2.1.0.js"></script>
+    <script src="js/semantic.min.js"></script>
+    <script src="js/script.js"></script>
+    <title>TinyPomo: A tiny pomodoro to-do-list</title>
+  </head>
+  <body>
+    <div id="container">
+      <!-- <h1 class="ui dividing header">TinyPomo</h1> -->
+      <div class="ui horizontal divider" id="title">TinyPomo</div>
+      <center><img src="img/logo.png" id="logo" alt="tinypomo logo"/></center>
+      <div class="ui two column grid">
+        <div class="column">
+          <div class="ui fluid action input">
+            <input type="text" id="input-todo" placeholder="你要做什么?">
+            <div id="btn-start" class="ui red button">开始番茄</div>
+          </div>
+          <div class="ui raised segment">
+            <a class="ui large red ribbon label">已完成的番茄</a>
+            <div id="seg-finished" class="ui divided animated list">
+              <div class="item">
+                <div class="content">
+                  <div class="middle-header"><i class="checkmark icon" /></i>10:00 学习Node.js</div>
+                </div>
+              </div>
+              <div class="item">
+                <div class="content">
+                  <div class="middle-header"><i class="checkmark icon"></i>10:30 学习Node.js</div>
+                </div>
+              </div>
+              <div class="item">
+                <div class="content">
+                  <div class="middle-header"><i class="checkmark icon"></i>11:00 前端学习</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="ui fluid action input">
+            <input id="input-newplan" type="text" placeholder="新的计划..">
+            <div id="btn-addplan" class="ui orange button">添加计划</div>
+          </div>
+          <div class="ui raised segment">
+            <a class="ui large orange ribbon label">工作计划</a>
+            <div id="seg-plan" class="ui divided list">
+              <div class="item">
+                <div class="content">
+                  <div class="ui checkbox">
+                    <input type="checkbox">
+                  </div>
+                  <div class="ckbox-label">学习Node.js</div>
+                </div>
+              </div>
+              <div class="item">
+                <div class="content">
+                  <div class="ui checkbox">
+                    <input type="checkbox">
+                  </div>
+                  <div class="ckbox-label">前端学习</div>
+                </div>
+              </div>
+              <div class="item">
+                <div class="content">
+                  <div class="ui checkbox">
+                    <input type="checkbox">
+                  </div>
+                  <div class="ckbox-label">完成本体构建</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ui circular segment" id="time"> 00:10 </div>
+      <p class="countdown"></p>
+    </div>
+  </body>
+</html>

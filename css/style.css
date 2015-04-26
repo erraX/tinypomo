@@ -1,0 +1,61 @@
+.item .ckbox-label {
+  display: inline-block;
+  height: 35px;
+  line-height: 35px;
+  cursor: pointer;
+}
+
+#container {
+  margin:auto;
+  width: 1000px;
+  padding-top:1px;
+}
+
+#countdown {
+  /* position: relative; */
+  /* top: 50%;           */
+  line-height: 70px;
+  font-size: 3em;
+  width: 114px;      
+}
+
+#title {
+  margin-top: 50px;
+  margin-bottom: 0px;
+  font-size: 2em;
+}
+
+#logo {
+  margin-bottom: 50px;
+  width: 50px;
+}
+
+.item .middle-header {      
+  height: 2.5em;     
+  line-height: 2.5em;
+}                    
+
+#time {
+  margin-top: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  height: 170px;
+  padding: 28px;
+  width: 170px;
+  display: block;
+  line-height: 114px;
+  font-size: 3em;
+}
+
+.item .content {
+  height: 2.5em;
+}
+
+.item .content .checkbox {
+  position: relative;
+  top: -1px;
+}
+
+#input-todo:disabled {
+  background-color: #EEE;
+}
