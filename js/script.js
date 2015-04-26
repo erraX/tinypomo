@@ -85,7 +85,6 @@ function switchCheckboxStatus(ckbox) {
   }
 }
 
-
 /**
 * @description 把土豆的名称填入要完成的番茄中
 * @param {Label} label 土豆名字
