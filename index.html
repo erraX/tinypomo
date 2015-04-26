@@ -4,17 +4,16 @@
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
     <link rel="stylesheet" href="css/style.css" media="all">
     <link rel="stylesheet" href="css/semantic.min.css" media="all">
-    <script src="js/angular.min.js"></script>
     <script src="js/jquery-2.1.0.js"></script>
     <script src="js/semantic.min.js"></script>
     <script src="js/script.js"></script>
-    <title>TinyPomo: Really save your time</title>
+    <title>TinyPomo: A tiny pomodoro to-do-list</title>
   </head>
   <body>
     <div id="container">
       <!-- <h1 class="ui dividing header">TinyPomo</h1> -->
       <div class="ui horizontal divider" id="title">TinyPomo</div>
-      <center><img src="img/logo.png" id="logo"/></center>
+      <center><img src="img/logo.png" id="logo" alt="tinypomo logo"/></center>
       <div class="ui two column grid">
         <div class="column">
           <div class="ui fluid action input">
@@ -26,17 +25,17 @@
             <div id="seg-finished" class="ui divided animated list">
               <div class="item">
                 <div class="content">
-                  <div class="header middle-header"><i class="checkmark icon"></i>10:00 学习Node.js</div>
+                  <div class="middle-header"><i class="checkmark icon" /></i>10:00 学习Node.js</div>
                 </div>
               </div>
               <div class="item">
                 <div class="content">
-                  <div class="header middle-header"><i class="checkmark icon"></i>10:30 学习Node.js</div>
+                  <div class="middle-header"><i class="checkmark icon"></i>10:30 学习Node.js</div>
                 </div>
               </div>
               <div class="item">
                 <div class="content">
-                  <div class="header middle-header"><i class="checkmark icon"></i>11:00 前端学习</div>
+                  <div class="middle-header"><i class="checkmark icon"></i>11:00 前端学习</div>
                 </div>
               </div>
             </div>
@@ -54,31 +53,31 @@
                 <div class="content">
                   <div class="ui checkbox">
                     <input type="checkbox">
-                    <label class="header">学习Node.js</label>
                   </div>
+                  <div class="ckbox-label">学习Node.js</div>
                 </div>
               </div>
               <div class="item">
                 <div class="content">
                   <div class="ui checkbox">
                     <input type="checkbox">
-                    <label class="header">前端学习</label>
                   </div>
+                  <div class="ckbox-label">前端学习</div>
                 </div>
               </div>
               <div class="item">
                 <div class="content">
-                  <div class="ui left floated checkbox">
+                  <div class="ui checkbox">
                     <input type="checkbox">
-                    <label class="header">完成本体构建</label>
                   </div>
+                  <div class="ckbox-label">完成本体构建</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="ui circular segment" id="time"> 01:00 </div>
+      <div class="ui circular segment" id="time"> 00:10 </div>
       <p class="countdown"></p>
     </div>
   </body>

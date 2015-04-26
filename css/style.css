@@ -1,3 +1,10 @@
+.item .ckbox-label {
+  display: inline-block;
+  height: 35px;
+  line-height: 35px;
+  cursor: pointer;
+}
+
 #container {
   margin:auto;
   width: 1000px;
@@ -46,5 +53,9 @@
 
 .item .content .checkbox {
   position: relative;
-  top: 10px;
+  top: -1px;
+}
+
+#input-todo:disabled {
+  background-color: #EEE;
 }
