@@ -3,10 +3,8 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
     <link rel="stylesheet" href="css/style.css" media="all">
-    <link rel="stylesheet" href="css/semantic.min.css" media="all">
-    <script src="js/jquery-2.1.0.js"></script>
-    <script src="js/semantic.min.js"></script>
-    <script src="js/script.js"></script>
+    <!-- <link rel="stylesheet" href="css/semantic.min.css" media="all"> -->
+    <link href="http://cdn.bootcss.com/semantic-ui/1.12.0/semantic.css" rel="stylesheet">
     <title>TinyPomo: A tiny pomodoro to-do-list</title>
   </head>
   <body>
@@ -17,12 +15,12 @@
       <div class="ui two column grid">
         <div class="column">
           <div class="ui fluid action input">
-            <input type="text" id="input-todo" placeholder="你要做什么?">
-            <div id="btn-start" class="ui red button">开始番茄</div>
+            <input type="text" id="input-potato" placeholder="你要做什么?">
+            <div id="btn-addPotato" class="ui red button">开始番茄</div>
           </div>
           <div class="ui raised segment">
             <a class="ui large red ribbon label">已完成的番茄</a>
-            <div id="seg-finished" class="ui divided animated list">
+            <div id="seg-potato" class="ui divided animated list">
               <div class="item">
                 <div class="content">
                   <div class="middle-header"><i class="checkmark icon" /></i>10:00 学习Node.js</div>
@@ -43,12 +41,12 @@
         </div>
         <div class="column">
           <div class="ui fluid action input">
-            <input id="input-newplan" type="text" placeholder="新的计划..">
-            <div id="btn-addplan" class="ui orange button">添加计划</div>
+            <input id="input-tomato" type="text" placeholder="新的计划..">
+            <div id="btn-addTomato" class="ui orange button">添加计划</div>
           </div>
           <div class="ui raised segment">
             <a class="ui large orange ribbon label">工作计划</a>
-            <div id="seg-plan" class="ui divided list">
+            <div id="seg-tomato" class="ui divided list">
               <div class="item">
                 <div class="content">
                   <div class="ui checkbox">
@@ -77,8 +75,42 @@
           </div>
         </div>
       </div>
-      <div class="ui circular segment" id="time"> 00:10 </div>
+      <div class="ui circular segment" id="countdown"> 00:10 </div>
       <p class="countdown"></p>
     </div>
+    <script src="http://cdn.bootcss.com/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="http://cdnjs.gtimg.com/cdnjs/libs/backbone.js/1.1.2/backbone-min.js"></script>
+    <script src="http://cdn.bootcss.com/backbone-localstorage.js/1.1.16/backbone.localStorage-min.js"></script>
+    <script src="http://cdn.bootcss.com/semantic-ui/1.12.0/semantic.js"></script>
+    <!-- <script src="js/script.js"></script> -->
+    <script src="js/Model.js"></script>
+    <script src="js/Collection.js"></script>
+    <script src="js/View.js"></script>
+    <script src="js/app.js"></script>
+
+    <!-- Templates -->
+    <script type="text/template" id="potatoItem"> 
+      <div class="item">
+        <div class="content">
+          <div class="middle-header">
+            <i class="checkmark icon"></i>
+            <%= title %>
+          </div>
+        </div>
+      </div>
+    </script>
+
+    <script type="text/template" id="tomatoItem"> 
+      <div class="item">
+        <div class="content">
+          <div class="ui checkbox">
+            <input type="checkbox">
+          </div>
+          <div class="ckbox-label"><%= title%></div>
+        </div>
+      </div>
+    </script>
+    <!-- end of templates -->
   </body>
 </html>
