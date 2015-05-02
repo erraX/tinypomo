@@ -1,0 +1,70 @@
+$grey : #EEE;
+@mixin center ($width) {
+    margin-left: auto;
+    margin-right: auto;
+    width: $width;
+}
+
+.item {
+    .ckbox-label {
+        display: inline-block;
+        height: 35px;
+        line-height: 35px;
+        cursor: pointer;
+    }
+    
+    .content {
+        height: 2.5em;
+
+    }
+
+    .checkbox {
+        position: relative;
+        top: -1px;
+    }
+
+    .middle-header {
+        height: 2.5em;      
+        line-height: 2.5em; 
+    }
+}
+
+.web-title {
+  margin-top: 50px;
+  margin-bottom: 0px;
+  font-size: 2em;
+}
+
+.web-logo {
+  margin-bottom: 50px;
+  width: 50px;
+}
+
+#container {
+  margin:auto;
+  width: 1000px;
+  padding-top:1px;
+}
+
+#countdown {
+  /* position: relative; */
+  /* top: 50%;           */
+  line-height: 70px;
+  font-size: 3em;
+  width: 114px;      
+}
+
+#countdown {
+  @include center(170px);
+  margin-top: 50px;
+  height: 170px;
+  padding: 28px;
+  display: block;
+  line-height: 114px;
+  font-size: 3em;
+}
+
+
+#input-potato:disabled {
+  background-color: $grey;
+}
