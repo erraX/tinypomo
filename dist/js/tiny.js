@@ -33,14 +33,20 @@ TomatoModel = Backbone.Model.extend({
 CountDownConfig = Backbone.Model.extend({
   "default": {
     duration: 10,
+    time: 10,
     going: false
   },
   initialize: function() {
-    this.on('change:duration', function() {
-      if (this.duration) {
-        this.going = false;
+    this.on('change:time', function() {
+      console.log("Countdownconfig changed");
+      if (this.attributes.time) {
+        this.attributes.going = false;
       }
     });
+  },
+  dec: function() {
+    this.attributes.time--;
+    return console.log("CountDownConfig decrement, now: " + this.attributes.time);
   }
 });
 
@@ -71,9 +77,14 @@ eventTransfer = _.extend({}, Backbone.Events);
 InputFieldView = Backbone.View.extend({
   initialize: function() {
     eventTransfer.on('tomatoClicked', this.onTomatoClicked, this);
+    eventTransfer.on('onGoingchanged', this.onGoing, this);
   },
   onTomatoClicked: function(data) {
-    this.$el.val(data.title);
+    this.$el.find("input").val(data.title);
+  },
+  onGoing: function(data) {
+    this.$el.find(".button").toggleClass("disabled", data.going);
+    return this.$el.find("input").attr("disabled", data.going);
   },
   render: function() {
     this.$el.val(this.model.get("title"));
@@ -119,6 +130,7 @@ TomatoView = Backbone.View.extend({
   className: "item",
   initialize: function() {
     this.template = _.template($("#tomatoItem").html());
+    this.listenTo(this.model, "change", this.render);
   },
   events: {
     "click .ckbox-label": "addToPotatoInputField",
@@ -137,7 +149,11 @@ TomatoView = Backbone.View.extend({
   render: function() {
     this.$el.html(this.template(this.model.attributes));
     this.$el.find(".ui.checkbox").checkbox(this.model.get("done") ? 'check' : 'uncheck');
-    return this;
+    if (this.model.get("done")) {
+      this.$el.find(".ckbox-label").attr("class", "ckbox-label checked");
+    } else {
+      this.$el.find(".ckbox-label").attr("class", "ckbox-label");
+    }
   }
 });
 
@@ -165,9 +181,35 @@ TomatoListView = Backbone.View.extend({
 
 TimeCountDown = Backbone.View.extend({
   initialize: function() {
-    this.listenTo(this.model, 'change', this.render);
+    eventTransfer.on('receiveTime', this.change, this);
+    eventTransfer.on('onGoingchanged', this.onGoing, this);
   },
-  render: function() {}
+  pad: function(num, n) {
+    var len;
+    len = num.toString().length;
+    while (len < n) {
+      num = "0" + num;
+      len++;
+    }
+    return num;
+  },
+  change: function(data) {
+    var duration, min, sec;
+    duration = data.time;
+    min = Math.floor(duration / 60);
+    sec = duration % 60;
+    console.log("duration:" + duration);
+    console.log("min:" + min);
+    console.log("sec:" + sec);
+    min = this.pad(min, 2);
+    sec = this.pad(sec, 2);
+    return this.$el.html(min + ":" + sec);
+  },
+  onGoing: function(data) {
+    if (!data.going) {
+      return this.$el.html("02:00");
+    }
+  }
 });
 
 AppView = Backbone.View.extend({
@@ -177,8 +219,8 @@ AppView = Backbone.View.extend({
     this.tomatoList = this.$("#seg-tomato");
     this.inputPotato = this.$("#input-potato");
     this.inputTomato = this.$("#input-tomato");
-    this.btnStart = this.$("#btn-addPotato");
-    this.btnAddPlan = this.$("#btn-addTomato");
+    this.btnStart = this.$("#input-potato .button");
+    this.btnAddPlan = this.$("#input-tomato .button");
     this.countDown = this.$("#countdown");
     this.potatos = new PotatoCollection([
       {
@@ -195,8 +237,9 @@ AppView = Backbone.View.extend({
       }
     ]);
     this.countDownConfig = new CountDownConfig({
-      duration: 10,
-      going: false
+      duration: 120,
+      going: false,
+      time: 120
     });
     this.potatoInput = new InputField({
       "title": ""
@@ -221,34 +264,67 @@ AppView = Backbone.View.extend({
     this.viewTomato.render();
     this.viewCountDown.render();
     this.viewPotatoInputField.render();
-    this.listenTo(this.potatos, 'add', this.addOnePotato);
     this.listenTo(this.potatos, 'reset', this.addAllPotato);
     this.listenTo(this.potatos, 'all', this.render);
-    this.listenTo(this.tomatos, 'add', this.addOneTomato);
     this.listenTo(this.tomatos, 'reset', this.addAllTomato);
-    return this.listenTo(this.tomatos, 'all', this.render);
+    this.listenTo(this.tomatos, 'all', this.render);
+    return eventTransfer.on('addOnePotato', this.addOnePotato, this);
   },
   events: {
-    "click #btn-addPotato": "addPotato",
-    "click #btn-addTomato": "addTomato"
-  },
-  toggleStatus: function() {
-    this.btnStart.toggleClass("disabled", this.model.get('done'));
-    $("#input-todo").attr("disabled", countDownConfig.get("starting"));
+    "click #input-potato .button": "addPotato",
+    "click #input-tomato .button": "addTomato"
   },
   addPotato: function() {
     var newpotato, title;
-    title = $("#input-potato").val();
+    title = $("#input-potato input").val();
     newpotato = new PotatoModel({
       'title': title
     });
     if (newpotato.isValid()) {
-      return this.potatos.add(newpotato);
+      this.countDownConfig.set('going', true);
+      this.countDownConfig.set('time', this.countDownConfig.get('duration'));
+      console.log("Starting potato Going: " + this.countDownConfig.get("going"));
+      console.log(" Duration" + this.countDownConfig.get('time'));
+      eventTransfer.trigger('onGoingchanged', {
+        'going': true
+      });
+      this.startCountDown(this.countDownConfig);
     }
+  },
+  addOnePotato: function() {
+    var newpotato, title;
+    title = $("#input-potato input").val();
+    newpotato = new PotatoModel({
+      'title': title
+    });
+    this.potatos.add(newpotato);
+  },
+  startCountDown: function(cdConfig) {
+    var decrement;
+    decrement = function() {
+      if (cdConfig.get("time")) {
+        cdConfig.dec();
+        setTimeout(decrement, 1000);
+        eventTransfer.trigger('receiveTime', {
+          'time': cdConfig.get("time")
+        });
+        eventTransfer.trigger('onGoingchanged', {
+          'going': true
+        });
+      } else {
+        cdConfig.set("going", false);
+        eventTransfer.trigger('onGoingchanged', {
+          'going': false
+        });
+        eventTransfer.trigger('addOnePotato');
+        eventTransfer.trigger('resetCountDown');
+      }
+    };
+    return decrement();
   },
   addTomato: function() {
     var newTomato, title;
-    title = $("#input-tomato").val();
+    title = $("#input-tomato input").val();
     newTomato = new TomatoModel({
       'title': title
     });

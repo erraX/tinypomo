@@ -14,75 +14,41 @@
       <center><img src="img/logo.png" class="web-logo" alt="tinypomo logo"/></center>
       <div class="ui two column grid">
         <div class="column">
-          <div class="ui fluid action input">
-            <input type="text" id="input-potato" placeholder="你要做什么?">
-            <div id="btn-addPotato" class="ui red button">开始番茄</div>
+          <div id="input-potato" class="ui fluid action input">
+            <input type="text" placeholder="你要做什么?">
+            <div class="ui red button">开始番茄</div>
           </div>
           <div class="ui raised segment">
             <a class="ui large red ribbon label">已完成的番茄</a>
             <div id="seg-potato" class="ui divided animated list">
-              <div class="item">
-                <div class="content">
-                  <div class="middle-header"><i class="checkmark icon" /></i>10:00 学习Node.js</div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="content">
-                  <div class="middle-header"><i class="checkmark icon"></i>10:30 学习Node.js</div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="content">
-                  <div class="middle-header"><i class="checkmark icon"></i>11:00 前端学习</div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
         <div class="column">
-          <div class="ui fluid action input">
-            <input id="input-tomato" type="text" placeholder="新的计划..">
-            <div id="btn-addTomato" class="ui orange button">添加计划</div>
+          <div id="input-tomato" class="ui fluid action input">
+            <input type="text" placeholder="新的计划..">
+            <div class="ui orange button">添加计划</div>
           </div>
           <div class="ui raised segment">
             <a class="ui large orange ribbon label">工作计划</a>
             <div id="seg-tomato" class="ui divided list">
-              <div class="item">
-                <div class="content">
-                  <div class="ui checkbox">
-                    <input type="checkbox">
-                  </div>
-                  <div class="ckbox-label">学习Node.js</div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="content">
-                  <div class="ui checkbox">
-                    <input type="checkbox">
-                  </div>
-                  <div class="ckbox-label">前端学习</div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="content">
-                  <div class="ui checkbox">
-                    <input type="checkbox">
-                  </div>
-                  <div class="ckbox-label">完成本体构建</div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="ui circular segment" id="countdown"> 00:10 </div>
+      <div class="ui circular segment" id="countdown"> 02:00 </div>
       <p class="countdown"></p>
     </div>
-    <script src="http://cdn.bootcss.com/underscore.js/1.8.3/underscore-min.js"></script>
-    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
-    <script src="http://cdnjs.gtimg.com/cdnjs/libs/backbone.js/1.1.2/backbone-min.js"></script>
-    <script src="http://cdn.bootcss.com/backbone-localstorage.js/1.1.16/backbone.localStorage-min.js"></script>
-    <script src="http://cdn.bootcss.com/semantic-ui/1.12.0/semantic.js"></script>
+    <!-- <script src="http://cdn.bootcss.com/underscore.js/1.8.3/underscore&#45;min.js"></script> -->
+    <!-- <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script> -->
+    <!-- <script src="http://cdnjs.gtimg.com/cdnjs/libs/backbone.js/1.1.2/backbone&#45;min.js"></script> -->
+    <!-- <script src="http://cdn.bootcss.com/backbone&#45;localstorage.js/1.1.16/backbone.localStorage&#45;min.js"></script> -->
+    <!-- <script src="http://cdn.bootcss.com/semantic&#45;ui/1.12.0/semantic.js"></script> -->
+    <script src="dist/js/underscore-min.js"></script>
+    <script src="dist/js/jquery.min.js"></script>
+    <script src="dist/js/backbone-min.js"></script>
+    <script src="dist/js/backbone.localStorage-min.js"></script>
+    <script src="dist/js/semantic.js"></script>
     <!-- <script src="js/script.js"></script> -->
     <!-- <script src="js/Model.js"></script> -->
     <!-- <script src="js/Collection.js"></script> -->

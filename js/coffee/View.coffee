@@ -3,10 +3,14 @@ eventTransfer = _.extend {}, Backbone.Events
 InputFieldView = Backbone.View.extend
   initialize: ->
     eventTransfer.on 'tomatoClicked', this.onTomatoClicked, this
+    eventTransfer.on 'onGoingchanged', this.onGoing, this
     return
-  onTomatoClicked: (data)->
-    this.$el.val data.title
+  onTomatoClicked: (data) ->
+    this.$el.find("input").val data.title
     return
+  onGoing: (data) ->
+    this.$el.find(".button").toggleClass "disabled", data.going
+    this.$el.find("input").attr "disabled", data.going
   render: ->
     this.$el.val this.model.get "title"
     return
@@ -39,25 +43,39 @@ TomatoView = Backbone.View.extend
   className: "item"
   initialize: ->
     this.template = _.template $("#tomatoItem").html()
+    this.listenTo this.model, "change", this.render
     return
+
   events:
     "click .ckbox-label": "addToPotatoInputField"
     "click .ui.checkbox": "toggleDone"
+
   addToPotatoInputField: ->
     title = this.$el
       .find ".ckbox-label"
       .html()
     eventTransfer.trigger 'tomatoClicked', {'title': title}
     return
+
   toggleDone: ->
     this.model.toggle()
     return
+
   render: ->
     this.$el.html this.template this.model.attributes
     this.$el
       .find ".ui.checkbox"
       .checkbox if this.model.get "done" then 'check' else 'uncheck'
-    this
+
+    if this.model.get "done"
+        this.$el
+            .find ".ckbox-label"
+            .attr "class", "ckbox-label checked"
+    else
+        this.$el
+            .find ".ckbox-label"
+            .attr "class", "ckbox-label"
+    return
 
 TomatoListView = Backbone.View.extend
   initialize: ->
@@ -76,10 +94,33 @@ TomatoListView = Backbone.View.extend
 
 TimeCountDown = Backbone.View.extend
   initialize: ->
-    this.listenTo this.model, 'change', this.render
+    eventTransfer.on 'receiveTime', this.change, this
+    eventTransfer.on 'onGoingchanged', this.onGoing, this
     return
-  render: ->
-    return
+
+  pad: (num, n) ->
+    len = num.toString().length
+    while len < n
+        num = "0" + num
+        len++
+    num
+
+  change: (data) ->
+    duration = data.time
+    min = Math.floor duration / 60
+    sec = duration % 60
+
+    console.log "duration:" + duration
+    console.log "min:" + min
+    console.log "sec:" + sec
+
+    min = this.pad min, 2
+    sec = this.pad sec, 2
+    this.$el.html min + ":" + sec
+
+  onGoing: (data) ->
+    if not data.going
+        this.$el.html "02:00"
 
 AppView = Backbone.View.extend
   el: $("#container")
@@ -90,13 +131,13 @@ AppView = Backbone.View.extend
     this.potatoList = this.$("#seg-potato")
     this.tomatoList = this.$("#seg-tomato")
 
-    # 土豆和番茄的输入框
+    # 土豆和番茄的输入框和按钮
     this.inputPotato = this.$("#input-potato")
     this.inputTomato = this.$("#input-tomato")
 
     # 添加土豆和番茄的按钮
-    this.btnStart = this.$("#btn-addPotato")
-    this.btnAddPlan = this.$("#btn-addTomato")
+    this.btnStart = this.$("#input-potato .button")
+    this.btnAddPlan = this.$("#input-tomato .button")
 
     # 倒计时表
     this.countDown = this.$("#countdown")
@@ -107,7 +148,7 @@ AppView = Backbone.View.extend
     this.potatos = new PotatoCollection [{"title": "potato1"}]
     this.tomatos = new TomatoCollection [{"title": "tomato1", done: false}, {title: "tomato2", done: true}]
     # 倒计时参数Model
-    this.countDownConfig = new CountDownConfig {duration: 10, going: false}
+    this.countDownConfig = new CountDownConfig {duration: 120, going: false, time: 120}
     # 番茄输入框Model
     this.potatoInput = new InputField {"title": ""}
 
@@ -117,36 +158,62 @@ AppView = Backbone.View.extend
     this.viewCountDown = new TimeCountDown {el: this.countDown, model: this.countDownConfig}
     this.viewPotatoInputField = new InputFieldView {el: this.inputPotato, model: this.potatoInput}
 
-    this.viewPotato.render();
-    this.viewTomato.render();
-    this.viewCountDown.render();
-    this.viewPotatoInputField.render();
+    this.viewPotato.render()
+    this.viewTomato.render()
+    this.viewCountDown.render()
+    this.viewPotatoInputField.render()
 
-    this.listenTo this.potatos, 'add', this.addOnePotato
+    # this.listenTo this.potatos, 'add', this.addOnePotato
     this.listenTo this.potatos, 'reset', this.addAllPotato
     this.listenTo this.potatos, 'all', this.render
 
-    this.listenTo this.tomatos, 'add', this.addOneTomato
+    #  this.listenTo this.tomatos, 'add', this.addOneTomato
     this.listenTo this.tomatos, 'reset', this.addAllTomato
     this.listenTo this.tomatos, 'all', this.render
 
-  events:
-    "click #btn-addPotato" : "addPotato",
-    "click #btn-addTomato": "addTomato"
+    eventTransfer.on 'addOnePotato', this.addOnePotato, this
 
-  toggleStatus: ->
-    this.btnStart.toggleClass "disabled", this.model.get('done')
-    $("#input-todo").attr "disabled", countDownConfig.get("starting")
-    return
+  events:
+    "click #input-potato .button" : "addPotato",
+    "click #input-tomato .button": "addTomato"
 
   addPotato: ->
-    title = $("#input-potato").val()
+    title = $("#input-potato input").val()
     newpotato = new PotatoModel {'title': title}
     if newpotato.isValid()
-      this.potatos.add newpotato
+      # 等倒计时完成了再添加番茄
+      # 开始倒计时
+      this.countDownConfig.set 'going', true
+      this.countDownConfig.set 'time', this.countDownConfig.get 'duration'
+      console.log "Starting potato Going: " + this.countDownConfig.get "going"
+      console.log " Duration" + this.countDownConfig.get 'time'
+      eventTransfer.trigger 'onGoingchanged', {'going': true}
+      this.startCountDown this.countDownConfig
+    return
+
+  addOnePotato: ->
+    title = $("#input-potato input").val()
+    newpotato = new PotatoModel {'title': title}
+    this.potatos.add newpotato
+    return
+
+  startCountDown: (cdConfig)->
+    decrement = ->
+      if cdConfig.get "time"
+        cdConfig.dec()
+        setTimeout decrement, 1000
+        eventTransfer.trigger 'receiveTime', {'time': cdConfig.get "time"}
+        eventTransfer.trigger 'onGoingchanged', {'going': true}
+      else
+        cdConfig.set "going", false
+        eventTransfer.trigger 'onGoingchanged', {'going': false}
+        eventTransfer.trigger 'addOnePotato'
+        eventTransfer.trigger 'resetCountDown'
+      return
+    decrement()
 
   addTomato: ->
-    title = $("#input-tomato").val()
+    title = $("#input-tomato input").val()
     newTomato = new TomatoModel {'title': title}
     if newTomato.isValid()
       this.tomatos.add newTomato

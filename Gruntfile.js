@@ -41,7 +41,7 @@ module.exports = function(grunt) {
       },
 
       js: {
-        files: ['js/*.coffee'],
+        files: ['js/coffee/*.coffee'],
         tasks: ['coffee'],
         options: {
           spawn: false

@@ -23,6 +23,11 @@ $grey : #EEE;
         top: -1px;
     }
 
+    .ckbox-label.checked {
+        text-decoration:line-through;
+        color: #A8A8A8;
+    }
+
     .middle-header {
         height: 2.5em;      
         line-height: 2.5em; 
